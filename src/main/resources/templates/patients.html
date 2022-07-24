@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
 xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-layout:decorate="template1">
+layout:decorate="template1"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -33,19 +35,19 @@ layout:decorate="template1">
         </thead>
         <tbody>
             <tr th:each="p:${ListPatients}">
-                <th th:text="${p.id}">ID</th>
-                <th th:text="${p.name}">Nom</th>
-                <th th:text="${p.dateNissance}">Date de naissance</th>
-                <th th:text="${p.malade}">etat santé</th>
-                <th th:text="${p.Score}">Score</th>
+                <td th:text="${p.id}">ID</td>
+                <td th:text="${p.name}">Nom</td>
+                <td th:text="${p.dateNissance}">Date de naissance</td>
+                <td th:text="${p.malade}">etat santé</td>
+                <td th:text="${p.Score}">Score</td>
 
-                <th >
+                <td sec:authorize="hasRole('ADMIN')">
                     <a class="btn btn-info" th:href="@{editPatient(id=${p.id},keyword=${keyword},page=${carruntpage})}">Edit</a>
-                </th>
+                </td>
 
-                <th >
+                <td sec:authorize="hasRole('ADMIN')">
                     <a onclick="return confirm('voulez vous vraiment supprimer!!')" class="btn btn-danger" th:href="@{delete(id=${p.id},keyword=${keyword},page=${carruntpage})}">Delete</a>
-                </th>
+                </td>
             </tr>
         </tbody>
 
