@@ -45,7 +45,7 @@ import com.HOPITALL.HOPITALL.repositiry.PateintRepository;
 	// 		System.out.println(p.getScore());
 	// 	}
 	// }
-		//@Bean
+		@Bean
 		CommandLineRunner commandLineRunner(PateintRepository pateintRepository){
 			return args ->{
 				pateintRepository.save( new Patient(null,"Noe",new Date(),false,75));

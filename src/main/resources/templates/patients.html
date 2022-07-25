@@ -17,7 +17,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
         <div class="card">
     
     <div class="card-header">List des patients</div>
-    <form method="get" th:action="@{/user/index}">
+    <form method="get" th:action="@{/index}">
         <label>Key word</label>
         <input type="text" name="keyword" th:value="${keyword}"/>
         <button type="submit" class="btn btn-primary">Chercher</button>
@@ -42,11 +42,11 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
                 <td th:text="${p.Score}">Score</td>
 
                 <td sec:authorize="hasRole('ADMIN')">
-                    <a class="btn btn-info" th:href="@{/admin/editPatient(id=${p.id},keyword=${keyword},page=${carruntpage})}">Edit</a>
+                    <a class="btn btn-info" th:href="@{/editPatient(id=${p.id},keyword=${keyword},page=${carruntpage})}">Edit</a>
                 </td>
 
                 <td sec:authorize="hasRole('ADMIN')">
-                    <a onclick="return confirm('voulez vous vraiment supprimer!!')" class="btn btn-danger" th:href="@{/admin/delete(id=${p.id},keyword=${keyword},page=${carruntpage})}">Delete</a>
+                    <a onclick="return confirm('voulez vous vraiment supprimer!!')" class="btn btn-danger" th:href="@{/delete(id=${p.id},keyword=${keyword},page=${carruntpage})}">Delete</a>
                 </td>
             </tr>
         </tbody>
@@ -56,7 +56,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
         <li th:each="page,status:${pages}">
             <a th:class="${status.index==carruntpage? ' btn btn-info ms-1' : 'btn btn-outline-info ms-1'}" 
             th:text="${status.index }"
-            th:href="@{/user/index(page=${status.index},keyword=${keyword})}"
+            th:href="@{/index(page=${status.index},keyword=${keyword})}"
             ></a>
         </li>
     </ul>

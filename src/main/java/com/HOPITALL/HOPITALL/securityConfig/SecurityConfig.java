@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // .withUser("almahdi").password("{noop}1234").roles("USER","ADMIN")
         // .and()
         // .withUser("sef").password("{noop}123").roles("USER");
-        /* 
+     /* 
         PasswordEncoder passwordEncoder=passwordEncoder();
         String PWD=passwordEncoder.encode("123");
         System.out.println("Abdo\n"+PWD);
@@ -36,15 +36,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .withUser("almahdi").password(passwordEncoder.encode("1234")).roles("USER","ADMIN")
         .and()
         .withUser("sef").password(PWD).roles("USER");
-        */
+      */
 
+        
         PasswordEncoder passwordEncoder=passwordEncoder();
         auth.jdbcAuthentication()
         .dataSource(dataSource)
-        .usersByUsernameQuery("select username as principal,password as credentials,isactive from users where username=?")
-        .authoritiesByUsernameQuery("select usename as principal,rolle as role,from users_rolles where username=?")
+        .usersByUsernameQuery("select username as principal,password as credentials, active from users where username=?")
+        .authoritiesByUsernameQuery("select username as principal,role as role from users_roles where username=?")
         .rolePrefix("ROLE_")
         .passwordEncoder(passwordEncoder);
+        
     }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -52,10 +54,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //http.formLogin().loginPage("/nomPg");
         http.formLogin();
         http.authorizeHttpRequests().antMatchers("/").permitAll();
-        // http.authorizeHttpRequests().antMatchers("/delete/**","/edit/**","/save/**","/formPatients/**").hasRole("ADMIN");
-        // http.authorizeHttpRequests().antMatchers("/index/**").hasRole("USER");
-        http.authorizeHttpRequests().antMatchers("/admin/**").hasRole("ADMIN");
-        http.authorizeHttpRequests().antMatchers("/user/**").hasRole("USER");
+         http.authorizeHttpRequests().antMatchers("/delete/**","/edit/**","/save/**","/formPatients/**").hasRole("ADMIN");
+         http.authorizeHttpRequests().antMatchers("/index/**").hasRole("USER");
+        // http.authorizeHttpRequests().antMatchers("/admin/**").hasRole("ADMIN");
+        // http.authorizeHttpRequests().antMatchers("/user/**").hasRole("USER");
         http.authorizeHttpRequests().anyRequest().authenticated();
         http.exceptionHandling().accessDeniedPage("/403");
     }
