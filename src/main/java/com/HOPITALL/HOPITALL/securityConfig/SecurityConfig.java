@@ -11,7 +11,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -24,6 +26,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private DataSource dataSource;
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+
+        /* memory auth */
+
+
         // auth.inMemoryAuthentication()
         // .withUser("almahdi").password("{noop}1234").roles("USER","ADMIN")
         // .and()
@@ -38,7 +44,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .withUser("sef").password(PWD).roles("USER");
       */
 
-        
+        /* JBCD auth */
+
+        /* 
         PasswordEncoder passwordEncoder=passwordEncoder();
         auth.jdbcAuthentication()
         .dataSource(dataSource)
@@ -46,7 +54,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .authoritiesByUsernameQuery("select username as principal,role as role from users_roles where username=?")
         .rolePrefix("ROLE_")
         .passwordEncoder(passwordEncoder);
+        */
+
+        /*user detailes service */
+
+        auth.userDetailsService(new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
+            return null;
+        }
+        });
+
         
+    
+    
     }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -56,6 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeHttpRequests().antMatchers("/").permitAll();
          http.authorizeHttpRequests().antMatchers("/delete/**","/edit/**","/save/**","/formPatients/**").hasRole("ADMIN");
          http.authorizeHttpRequests().antMatchers("/index/**").hasRole("USER");
+         http.authorizeHttpRequests().antMatchers("/webjars");
         // http.authorizeHttpRequests().antMatchers("/admin/**").hasRole("ADMIN");
         // http.authorizeHttpRequests().antMatchers("/user/**").hasRole("USER");
         http.authorizeHttpRequests().anyRequest().authenticated();
