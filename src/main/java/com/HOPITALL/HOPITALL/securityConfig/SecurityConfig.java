@@ -17,6 +17,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.HOPITALL.HOPITALL.securityConfig.service.UserDetailsServiceImpl;
+
 
 @Configuration
 @EnableWebSecurity
@@ -24,25 +26,30 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
+    @Autowired
+   private UserDetailsServiceImpl userDetailsService;
+
+   @Autowired
+   private PasswordEncoder passwordEncoder;
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
         /* memory auth */
 
-
-        // auth.inMemoryAuthentication()
-        // .withUser("almahdi").password("{noop}1234").roles("USER","ADMIN")
-        // .and()
-        // .withUser("sef").password("{noop}123").roles("USER");
-     /* 
+       
+        auth.inMemoryAuthentication()
+        .withUser("almahdi").password("1234").roles("USER","ADMIN")
+        .and()
+        .withUser("sef").password("123").roles("USER");
+     /*
         PasswordEncoder passwordEncoder=passwordEncoder();
         String PWD=passwordEncoder.encode("123");
-        System.out.println("Abdo\n"+PWD);
+        System.out.println("Abdo**********\n"+PWD);
         auth.inMemoryAuthentication()
         .withUser("almahdi").password(passwordEncoder.encode("1234")).roles("USER","ADMIN")
         .and()
         .withUser("sef").password(PWD).roles("USER");
-      */
+      /* 
 
         /* JBCD auth */
 
@@ -57,15 +64,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         */
 
         /*user detailes service */
-
-        auth.userDetailsService(new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
-            return null;
-        }
-        });
-
-        
+  
+        auth.userDetailsService(userDetailsService);
+       
     
     
     }
@@ -75,19 +76,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //http.formLogin().loginPage("/nomPg");
         http.formLogin();
         http.authorizeHttpRequests().antMatchers("/").permitAll();
-         http.authorizeHttpRequests().antMatchers("/delete/**","/edit/**","/save/**","/formPatients/**").hasRole("ADMIN");
-         http.authorizeHttpRequests().antMatchers("/index/**").hasRole("USER");
-         http.authorizeHttpRequests().antMatchers("/webjars");
+        //  http.authorizeHttpRequests().antMatchers("/delete/**","/edit/**","/save/**","/formPatients/**").hasRole("ADMIN");
+        //  http.authorizeHttpRequests().antMatchers("/index/**").hasRole("USER");
+         http.authorizeHttpRequests().antMatchers("/webjars/**");
+         http.authorizeHttpRequests().antMatchers("/delete/**","/edit/**","/save/**","/formPatients/**").hasAnyAuthority("ADMIN");
+         http.authorizeHttpRequests().antMatchers("/index/**").hasAnyAuthority("USER");
         // http.authorizeHttpRequests().antMatchers("/admin/**").hasRole("ADMIN");
         // http.authorizeHttpRequests().antMatchers("/user/**").hasRole("USER");
         http.authorizeHttpRequests().anyRequest().authenticated();
         http.exceptionHandling().accessDeniedPage("/403");
     }
-
+/*supprimer  mettre en application
     @Bean
     PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
-    
+    */
 }

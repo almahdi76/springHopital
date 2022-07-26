@@ -1,4 +1,4 @@
-package com.HOPITALL.HOPITALL.securityConfig;
+package com.HOPITALL.HOPITALL.securityConfig.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +16,7 @@ public class AppRole {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roleId;
     @Column(unique=true)
-    private String role;
+    private String roleName;
     private String description;
     
 }

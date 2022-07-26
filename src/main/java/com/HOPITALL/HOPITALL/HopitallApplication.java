@@ -8,9 +8,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.HOPITALL.HOPITALL.entities.Patient;
 import com.HOPITALL.HOPITALL.repositiry.PateintRepository;
+import com.HOPITALL.HOPITALL.securityConfig.service.SecurityService;
 
 @SpringBootApplication
 // public class HopitallApplication implements CommandLineRunner {
@@ -45,7 +48,7 @@ import com.HOPITALL.HOPITALL.repositiry.PateintRepository;
 	// 		System.out.println(p.getScore());
 	// 	}
 	// }
-		@Bean
+		//@Bean
 		CommandLineRunner commandLineRunner(PateintRepository pateintRepository){
 			return args ->{
 				pateintRepository.save( new Patient(null,"Noe",new Date(),false,75));
@@ -60,4 +63,25 @@ import com.HOPITALL.HOPITALL.repositiry.PateintRepository;
 			
 		// 	pateintRepository.findAll().forEach(p ->{System.out.println(p.getName());});
 		// }
+		//@Bean
+		CommandLineRunner saveUser(SecurityService securityService){
+			return args -> {
+				securityService.saveNewUser("abc", "1234", "1234");
+				securityService.saveNewUser("xyz", "789", "789");
+				securityService.saveNewUser("abcd", "789", "789");
+
+				securityService.saveNewRole("USER", "");
+				securityService.saveNewRole("ADMIN", "");
+
+				securityService.addRoleToUser("abc", "USER");
+				securityService.addRoleToUser("abc", "ADMIN");
+				securityService.addRoleToUser("xyz", "USER");
+				securityService.addRoleToUser("abcd", "USER");
+			};
+		}
+
+		@Bean
+		PasswordEncoder passwordEncoder(){
+			return new BCryptPasswordEncoder();
+		}
 }

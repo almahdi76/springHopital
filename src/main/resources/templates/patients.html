@@ -41,11 +41,11 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
                 <td th:text="${p.malade}">etat santé</td>
                 <td th:text="${p.Score}">Score</td>
 
-                <td sec:authorize="hasRole('ADMIN')">
+                <td sec:authorize="hasAnyAuthority('ADMIN')">
                     <a class="btn btn-info" th:href="@{/editPatient(id=${p.id},keyword=${keyword},page=${carruntpage})}">Edit</a>
                 </td>
 
-                <td sec:authorize="hasRole('ADMIN')">
+                <td sec:authorize="hasAnyAuthority('ADMIN')">
                     <a onclick="return confirm('voulez vous vraiment supprimer!!')" class="btn btn-danger" th:href="@{/delete(id=${p.id},keyword=${keyword},page=${carruntpage})}">Delete</a>
                 </td>
             </tr>

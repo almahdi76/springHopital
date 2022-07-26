@@ -35,7 +35,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
                  Patients
                 </a>
                 <ul class="dropdown-menu">
-                  <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" th:href="@{/formPatients}">Nouveau</a></li>
+                  <li sec:authorize="hasAnyAuthority('ADMIN')"><a class="dropdown-item" th:href="@{/formPatients}">Nouveau</a></li>
                   <li ><a class="dropdown-item" th:href="@{/index}">Chercher</a></li>
                   
                 </ul>
